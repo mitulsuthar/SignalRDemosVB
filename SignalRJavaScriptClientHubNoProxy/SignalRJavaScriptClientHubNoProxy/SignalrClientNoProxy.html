@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="Scripts/jquery-2.0.0.min.js"></script>
+    <script src="Scripts/jquery.signalR-1.0.1.min.js"></script>    
+    <script src="/signalr/hubs" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            var connection = $.hubConnection('http://localhost:8080');
+
+            connection.start();
+            var myHub = connection.createHubProxy("myHub");
+
+            $("#broadcast").click(function () {
+                myHub.invoke('chatter', $("#msg").val());
+            });
+
+            myHub.on('addMessage',function (message) {
+                $("#message").append('<li>' + message + '</li>');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <input id="msg" type="text"/>
+        <input type="button" id="broadcast" value="broadcast" />
+        <ul id="message">
+
+        </ul>
+    </div>
+</body>
+</html>
